@@ -51,13 +51,21 @@ Menghapus transaksi berdasarkan ID (nominal uang otomatis dikembalikan ke saldo 
 hanif-finance delete --id 12
 ```
 
+### 7. Standalone Executable (.exe / Binary Build)
+Untuk mendistribusikan aplikasi tanpa mengharuskan user menginstall Python, compile menjadi file binary standalone menggunakan PyInstaller:
+```bash
+pip install -e .[build]
+python build_exe.py
+```
+Binary akan dihasilkan di `dist/hanif-finance` (atau `dist/hanif-finance.exe` di Windows).
+
 ## Architecture & Conventions
-- **Zero Third-Party Dependencies**: Gunakan HANYA standard library Python (`sqlite3`, `json`, `argparse`, `os`, `pathlib`, `sys`, `datetime`). Jangan tambahkan ORM (SQLAlchemy, Peewee) atau CLI library eksternal (Click, Typer, Rich).
+- **Zero Third-Party Dependencies for Core**: Gunakan HANYA standard library Python untuk core runtime (`sqlite3`, `json`, `argparse`, `os`, `pathlib`, `sys`, `datetime`). PyInstaller hanya dijadikan optional dependency untuk proses build release.
 - **Dynamic Path Resolution**:
-  - Secara default, path database dicari di `~/Documents/ObsidianVault/hanif/09 - Hermes/hermes_data.db` (menggunakan `pathlib.Path.home()`).
-  - Harus mendukung override via Environment Variable:
-    1. `HANIF_FINANCE_DB_PATH`: Langsung menunjuk ke file `.db`.
-    2. `OBSIDIAN_VAULT_DIR`: Menunjuk ke root folder vault, lalu append `/09 - Hermes/hermes_data.db`.
+  - Secara otomatis mendeteksi environment:
+    1. Override via `HANIF_FINANCE_DB_PATH` atau `OBSIDIAN_VAULT_DIR`.
+    2. Jika folder Obsidian Vault Hanif ada (`~/Documents/ObsidianVault/...`), gunakan `hermes_data.db`.
+    3. **Fallback Open Source**: Jika tidak di environment Hanif, otomatis buat dan simpan database di `~/.hanif-finance/data.db` (Windows/Linux/Mac).
 - **Packaging**: Gunakan `pyproject.toml` dengan entry point `hanif-finance = "hanif_finance.cli:main"`. Ketika diinstall via `pip install -e .` atau `uv tool install`, Windows akan otomatis membuat wrapper executable (`hanif-finance.exe`) di folder Scripts/bin.
 
 ## Database Schema (`hermes_data.db`)

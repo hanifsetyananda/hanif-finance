@@ -13,9 +13,15 @@ def get_db_path() -> Path:
         vault_dir = Path(os.environ["OBSIDIAN_VAULT_DIR"]).resolve()
         return vault_dir / "09 - Hermes" / "hermes_data.db"
         
-    # 3. Default fallback: ~/Documents/ObsidianVault/hanif/09 - Hermes/hermes_data.db
+    # 3. Check if running in Hanif's environment (has his specific Obsidian vault structure)
     home_dir = Path.home()
-    return home_dir / "Documents" / "ObsidianVault" / "hanif" / "09 - Hermes" / "hermes_data.db"
+    hanif_vault_db = home_dir / "Documents" / "ObsidianVault" / "hanif" / "09 - Hermes" / "hermes_data.db"
+    if hanif_vault_db.parent.exists():
+        return hanif_vault_db
+        
+    # 4. Open-source default: store cleanly in ~/.hanif-finance/data.db (works on Windows/Linux/Mac)
+    user_data_db = home_dir / ".hanif-finance" / "data.db"
+    return user_data_db
 
 def get_db() -> sqlite3.Connection:
     """Get SQLite database connection and ensure schema exists."""

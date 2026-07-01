@@ -90,12 +90,29 @@ hanif-finance delete --id 12
 
 ---
 
-## ⚙️ Konfigurasi Lanjutan (Opsional)
+## ⚙️ Konfigurasi Lanjutan & Open Source (Opsional)
 
-Secara default, CLI ini akan mencari database di folder:
-- **Windows**: `C:\Users\<NamaKamu>\Documents\ObsidianVault\hanif\09 - Hermes\hermes_data.db`
-- **Linux/macOS**: `~/Documents/ObsidianVault/hanif/09 - Hermes/hermes_data.db`
+### Dimana datanya disimpan?
+CLI ini sangat fleksibel dan otomatis menyesuaikan lokasinya:
+1. **Untuk Pengguna Umum / Open Source**: Jika kamu install di laptop biasa, aplikasi otomatis menyimpan datanya secara aman di folder home kamu:
+   - **Windows**: `C:\Users\<NamaKamu>\.hanif-finance\data.db`
+   - **Linux / macOS**: `~/.hanif-finance/data.db`
+2. **Untuk Pengguna Obsidian**: Jika sistem mendeteksi folder Obsidian Vault Hanif (`~/Documents/ObsidianVault/...`), data otomatis tersambung ke sana.
+3. **Custom Location**: Kamu bisa menentukan sendiri lokasi file `.db` dengan mengisi Environment Variable `HANIF_FINANCE_DB_PATH` di sistem operasi kamu.
 
-Jika lokasi Obsidian Vault kamu berbeda, kamu bisa mengatur **Environment Variable** berikut di Windows/Linux:
-- `HANIF_FINANCE_DB_PATH`: Untuk mengubah langsung path lengkap ke file `.db`.
-- `OBSIDIAN_VAULT_DIR`: Untuk mengubah path folder root Obsidian Vault kamu.
+---
+
+## 📦 Build Menjadi Executable (.exe / Binary Standalone)
+Jika kamu ingin membagikan aplikasi ini ke teman yang **tidak menginstall Python**, kamu bisa mengkompilasi CLI ini menjadi satu file executable mandiri (`hanif-finance.exe` di Windows atau `hanif-finance` binary di Linux):
+
+1. Install dependency builder (PyInstaller):
+   ```bash
+   pip install -e .[build]
+   # atau jika pakai pip biasa:
+   pip install pyinstaller
+   ```
+2. Jalankan script build yang sudah disediakan:
+   ```bash
+   python build_exe.py
+   ```
+3. Selesai! File binary siap pakai (tanpa perlu install Python lagi) akan muncul di dalam folder `dist/`. Kamu tinggal copy file `dist/hanif-finance.exe` ke komputer mana saja.
