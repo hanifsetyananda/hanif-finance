@@ -5,6 +5,52 @@
 
 Project ini di-refactor agar **100% Cross-Platform (Windows & Linux)** sehingga dapat berjalan lancar ketika Hanif berpindah device kerja ke Windows tanpa ketergantungan pada symlink bash (`ln -sf`).
 
+## Available CLI Commands & Usage Syntax
+AI Agent WAJIB memanggil aplikasi lewat terminal menggunakan perintah `hanif-finance <subcommand> [args]` atau `python3 -m hanif_finance.cli <subcommand> [args]`.
+
+### 1. Check Balances
+Menampilkan saldo saat ini dari setiap akun:
+```bash
+hanif-finance balance
+```
+
+### 2. List Transactions (Human-Readable)
+Menampilkan daftar transaksi terbaru dalam format tabel untuk ditampilkan ke user:
+```bash
+hanif-finance list --limit 10
+# Filter berdasarkan akun tertentu (Gunakan Exact Name persis seperti di database, contoh: "Bank BCA"):
+hanif-finance list --account "Cash" --limit 5
+```
+
+### 3. Dump Transactions (Machine-Readable / JSON)
+Menampilkan riwayat transaksi dalam format mentah JSON (termasuk timestamp lengkap & `balance_after`). Gunakan perintah ini jika AI perlu melakukan parsing, agregasi, atau perhitungan background:
+```bash
+hanif-finance dump --limit 100
+```
+
+### 4. Add Transaction
+Mencatat transaksi baru. **Semua argument wajib diisi** (tidak mendukung short arguments seperti `-a`, `-t`):
+```bash
+# Pemasukan (in)
+hanif-finance add --account "Bank BCA" --type in --amount 5000000 --category "Gaji" --desc "Bayaran project website"
+
+# Pengeluaran (out)
+hanif-finance add --account "Cash" --type out --amount 15000 --category "Makanan" --desc "Beli nasi goreng"
+```
+*Catatan:* Argument `--type` hanya menerima `in` atau `out` (bukan MASUK/KELUAR). Tidak ada argument `--date`; transaksi otomatis memakai waktu sekarang. Untuk tanggal masa lalu, tulis di dalam deskripsi: `--desc "18 Juni: Beli nasgor"`.
+
+### 5. Edit Transaction
+Mengedit transaksi berdasarkan ID (otomatis menyesuaikan kalkulasi saldo akun yang bersangkutan):
+```bash
+hanif-finance edit --id 12 --amount 20000 --desc "Beli nasgor + sate" --category "Makanan"
+```
+
+### 6. Delete Transaction
+Menghapus transaksi berdasarkan ID (nominal uang otomatis dikembalikan ke saldo akun):
+```bash
+hanif-finance delete --id 12
+```
+
 ## Architecture & Conventions
 - **Zero Third-Party Dependencies**: Gunakan HANYA standard library Python (`sqlite3`, `json`, `argparse`, `os`, `pathlib`, `sys`, `datetime`). Jangan tambahkan ORM (SQLAlchemy, Peewee) atau CLI library eksternal (Click, Typer, Rich).
 - **Dynamic Path Resolution**:
