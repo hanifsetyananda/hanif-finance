@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hanif-finance"
+version = "1.0.0"
+description = "Cross-platform CLI helper to log financial transactions to Hanif's SQLite hermes_data.db in Obsidian Vault."
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [
+    {name = "Hanif Setyananda", email = "hanifsetyananda@example.com"}
+]
+keywords = ["cli", "finance", "obsidian", "sqlite", "hermes"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+    "Environment :: Console",
+]
+
+[project.scripts]
+hanif-finance = "hanif_finance.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["hanif_finance*"]
