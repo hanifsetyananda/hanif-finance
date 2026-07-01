@@ -4,7 +4,7 @@ from pathlib import Path
 
 def get_db_path() -> Path:
     """Resolve database path dynamically across Windows and Linux."""
-    # 1. Check direct environment variable override
+    # 1. Check direct environment variable override (e.g. HANIF_FINANCE_DB_PATH)
     if "HANIF_FINANCE_DB_PATH" in os.environ:
         return Path(os.environ["HANIF_FINANCE_DB_PATH"]).resolve()
         
@@ -13,15 +13,9 @@ def get_db_path() -> Path:
         vault_dir = Path(os.environ["OBSIDIAN_VAULT_DIR"]).resolve()
         return vault_dir / "09 - Hermes" / "hermes_data.db"
         
-    # 3. Check if running in Hanif's environment (has his specific Obsidian vault structure)
+    # 3. Default for standalone build / open source: store in ~/.hanif-finance/data.db
     home_dir = Path.home()
-    hanif_vault_db = home_dir / "Documents" / "ObsidianVault" / "hanif" / "09 - Hermes" / "hermes_data.db"
-    if hanif_vault_db.parent.exists():
-        return hanif_vault_db
-        
-    # 4. Open-source default: store cleanly in ~/.hanif-finance/data.db (works on Windows/Linux/Mac)
-    user_data_db = home_dir / ".hanif-finance" / "data.db"
-    return user_data_db
+    return home_dir / ".hanif-finance" / "data.db"
 
 def get_db() -> sqlite3.Connection:
     """Get SQLite database connection and ensure schema exists."""
