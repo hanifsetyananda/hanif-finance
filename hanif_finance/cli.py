@@ -2,7 +2,7 @@ import sys
 import json
 import argparse
 from datetime import datetime
-from .db import get_db
+from hanif_finance.db import get_db
 
 def print_balances():
     conn = get_db()
