@@ -102,8 +102,35 @@ CLI ini sangat fleksibel dan otomatis menyesuaikan lokasinya:
 
 ---
 
-## 📦 Build Menjadi Executable (.exe / Binary Standalone)
-Jika kamu ingin membagikan aplikasi ini ke teman yang **tidak menginstall Python**, kamu bisa mengkompilasi CLI ini menjadi satu file executable mandiri (`hanif-finance.exe` di Windows atau `hanif-finance` binary di Linux):
+## 📦 Cara Install dari File Executable (.exe / Binary) — Tanpa Python
+Jika kamu mendownload file standalone binary (`hanif-finance.exe` untuk Windows atau `hanif-finance` untuk Linux) dari GitHub Releases, kamu tidak perlu menginstall Python. Agar perintah `hanif-finance` bisa diketik langsung dari folder mana pun di terminalmu, ikuti langkah pemasangan ke **Global PATH** di bawah ini:
+
+### 🪟 Windows (.exe)
+1. Buat folder baru di komputermu, misalnya di `C:\Program Files\HanifFinance\` atau `C:\Tools\`.
+2. Pindahkan file `hanif-finance.exe` yang sudah didownload ke dalam folder tersebut.
+3. Daftarkan folder tersebut ke System PATH Windows:
+   - Buka **Start Menu** → ketik `Environment Variables` → pilih **Edit the system environment variables**.
+   - Klik tombol **Environment Variables...** di pojok kanan bawah.
+   - Di bagian *User variables* atau *System variables*, cari dan klik dua kali pada baris **Path**.
+   - Klik tombol **New**, lalu masukkan jalur folder tadi (contoh: `C:\Program Files\HanifFinance`).
+   - Klik **OK** pada semua jendela yang terbuka untuk menyimpan.
+4. Buka ulang Command Prompt atau PowerShell, lalu ketik `hanif-finance balance`. Selesai!
+
+### 🐧 Linux / macOS
+1. Pindahkan file binary `hanif-finance` yang sudah didownload ke dalam folder global path (biasanya `/usr/local/bin` atau `~/.local/bin`):
+   ```bash
+   sudo mv hanif-finance /usr/local/bin/hanif-finance
+   ```
+2. Berikan izin eksekusi (executable permission) pada file tersebut:
+   ```bash
+   sudo chmod +x /usr/local/bin/hanif-finance
+   ```
+3. Buka terminal baru dan ketik `hanif-finance balance`. Selesai!
+
+---
+
+## 🛠️ Build Sendiri Menjadi Executable (.exe / Binary)
+Jika kamu seorang developer dan ingin mengkompilasi sendiri kode source ini menjadi satu file executable mandiri:
 
 1. Install dependency builder (PyInstaller):
    ```bash
@@ -115,4 +142,4 @@ Jika kamu ingin membagikan aplikasi ini ke teman yang **tidak menginstall Python
    ```bash
    python build_exe.py
    ```
-3. Selesai! File binary siap pakai (tanpa perlu install Python lagi) akan muncul di dalam folder `dist/`. Kamu tinggal copy file `dist/hanif-finance.exe` ke komputer mana saja.
+3. File binary siap pakai akan muncul di dalam folder `dist/`. Kamu bisa mendistribusikan file tersebut atau memasangnya ke PATH menggunakan panduan di atas.
